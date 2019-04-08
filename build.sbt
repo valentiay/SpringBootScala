@@ -17,6 +17,8 @@ organizationHomepage := Some(url("http://www.codecentric.de"))
   Project dependencies
  */
 libraryDependencies ++= Seq(
+  "org.projectlombok" % "lombok" % "1.16.20",
+  "org.springframework.boot" % "spring-boot-starter" % "1.5.4.RELEASE",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.5.4.RELEASE",
   "org.springframework.boot" % "spring-boot-configuration-processor" % "1.5.4.RELEASE"
 )

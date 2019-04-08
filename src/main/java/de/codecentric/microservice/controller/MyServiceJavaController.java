@@ -11,16 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class MyServiceJavaController {
 
-    private final MyService myService;
-
-    @Autowired
-    public MyServiceJavaController(MyService myService) {
-        this.myService = myService;
-    }
 
     @RequestMapping(path = "/testjava", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public String handleRequest() {
-        return "Hallo from a Java controller! " + myService.getMessage();
+        return "Hallo from a Java controller! ";
     }
 }
