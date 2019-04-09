@@ -1,18 +1,17 @@
 package de.codecentric.microservice.db
 
 import javax.persistence.{Entity, GeneratedValue, GenerationType, Id}
-import org.springframework.data.domain.Pageable
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.query.Param
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
 import scala.beans.BeanProperty
 
-
 @Entity
-case class Category(@BeanProperty name: String, @BeanProperty description: String) {
-  // default constructor for JPA
+case class Category(@BeanProperty name: String,
+                    @BeanProperty description: String) {
+
   def this() {
-    this(null, null)
+    this("", "")
   }
 
   @Id
@@ -21,9 +20,6 @@ case class Category(@BeanProperty name: String, @BeanProperty description: Strin
   val id: Long = 0L
 }
 
-trait CategoryRepository extends JpaRepository[Category, java.lang.Long] {
-  type Categories = java.util.List[Category]
-
-  //  def findByReaderIgnoreCase(@Param("reader") reader: String, pageable: Pageable): Books
-  //  def findByIsbnIgnoreCase(@Param("isbn") isbn: String, pageable: Pageable): Books
+@Repository
+trait CategoryRepository extends CrudRepository[Category, java.lang.Long] {
 }

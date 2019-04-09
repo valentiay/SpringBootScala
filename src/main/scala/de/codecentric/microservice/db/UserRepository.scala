@@ -7,9 +7,9 @@ import scala.beans.BeanProperty
 
 @Entity
 case class User(@BeanProperty userName: String) {
-  // default constructor for JPA
+
   def this() {
-    this(null, null)
+    this("")
   }
 
   @Id
@@ -21,7 +21,4 @@ case class User(@BeanProperty userName: String) {
 
 trait UserRepository extends JpaRepository[User, java.lang.Long] {
   type Users = java.util.List[User]
-
-  //  def findByReaderIgnoreCase(@Param("reader") reader: String, pageable: Pageable): Books
-  //  def findByIsbnIgnoreCase(@Param("isbn") isbn: String, pageable: Pageable): Books
 }

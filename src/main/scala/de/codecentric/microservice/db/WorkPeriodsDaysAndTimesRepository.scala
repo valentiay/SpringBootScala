@@ -2,7 +2,7 @@ package de.codecentric.microservice.db
 
 import java.sql.Timestamp
 
-import javax.persistence.Entity
+import javax.persistence.{Entity, GeneratedValue, GenerationType, Id}
 import org.springframework.data.jpa.repository.JpaRepository
 
 import scala.beans.BeanProperty
@@ -11,16 +11,18 @@ import scala.beans.BeanProperty
 case class WorkPeriodsDaysAndTimes(@BeanProperty startDayTime: Timestamp,
                                    @BeanProperty endDayTime: Timestamp,
                                    @BeanProperty periodMin: Long,
-                                   @BeanProperty usersId:Long) {
-  // default constructor for JPA
+                                   @BeanProperty usersId: Long) {
   def this() {
-    this(null, null)
+    this(null, null, 0, 0)
   }
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @BeanProperty
+  val workSchedulesId: Long = 0L
+
 }
 
 trait WorkPeriodsDaysAndTimesRepository extends JpaRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {
   type WorkPeriodsDaysAndTimesList = java.util.List[WorkPeriodsDaysAndTimes]
-
-  //  def findByReaderIgnoreCase(@Param("reader") reader: String, pageable: Pageable): Books
-  //  def findByIsbnIgnoreCase(@Param("isbn") isbn: String, pageable: Pageable): Books
 }

@@ -7,11 +7,13 @@ import scala.beans.BeanProperty
 
 
 @Entity
-case class WorkPeriod(@BeanProperty timeAmount: Long, @BeanProperty description: String,
-@BeanProperty workPeriodsDaysAndTimesWorkSchedulesId: Long, @BeanProperty categoriesId:Long) {
-  // default constructor for JPA
+case class WorkPeriod(@BeanProperty timeAmount: Long,
+                      @BeanProperty description: String,
+                      @BeanProperty workPeriodsDaysAndTimesWorkSchedulesId: Long,
+                      @BeanProperty categoriesId: Long) {
+
   def this() {
-    this(null, null)
+    this(0, "", 0, 0)
   }
 
   @Id
@@ -22,8 +24,5 @@ case class WorkPeriod(@BeanProperty timeAmount: Long, @BeanProperty description:
 
 trait WorkPeriodRepository extends JpaRepository[WorkPeriod, java.lang.Long] {
   type WorkPeriods = java.util.List[WorkPeriod]
-
-  //  def findByReaderIgnoreCase(@Param("reader") reader: String, pageable: Pageable): Books
-  //  def findByIsbnIgnoreCase(@Param("isbn") isbn: String, pageable: Pageable): Books
 }
 
