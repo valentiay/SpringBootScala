@@ -11,10 +11,9 @@ import scala.beans.BeanProperty
 @Table(name = "WORK_PERIODS_DAYS_AND_TIMES")
 case class WorkPeriodsDaysAndTimes(@BeanProperty startDayTime: Timestamp,
                                    @BeanProperty endDayTime: Timestamp,
-                                   @BeanProperty periodMin: Long,
-                                   @BeanProperty usersId: Long) {
+                                   @BeanProperty periodMin: Long) {
   def this() {
-    this(null, null, 0, 0)
+    this(null, null, 0)
   }
 
   @Id
@@ -22,6 +21,10 @@ case class WorkPeriodsDaysAndTimes(@BeanProperty startDayTime: Timestamp,
   @BeanProperty
   val id: Long = 0L
 
+  @ManyToOne
+  @JoinColumn(name = "usersId", nullable = true)
+  @BeanProperty
+  var user: User = _
 }
 
 trait WorkPeriodsDaysAndTimesRepository extends JpaRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {
