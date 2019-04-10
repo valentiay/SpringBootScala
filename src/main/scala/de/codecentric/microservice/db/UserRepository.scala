@@ -1,11 +1,12 @@
 package de.codecentric.microservice.db
 
-import javax.persistence.{Entity, GeneratedValue, GenerationType, Id}
+import javax.persistence._
 import org.springframework.data.jpa.repository.JpaRepository
 
 import scala.beans.BeanProperty
 
 @Entity
+@Table(name = "USERS")
 case class User(@BeanProperty userName: String) {
 
   def this() {

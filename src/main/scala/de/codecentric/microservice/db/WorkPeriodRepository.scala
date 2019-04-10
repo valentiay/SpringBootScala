@@ -1,15 +1,16 @@
 package de.codecentric.microservice.db
 
-import javax.persistence.{Entity, GeneratedValue, GenerationType, Id}
+import javax.persistence._
 import org.springframework.data.jpa.repository.JpaRepository
 
 import scala.beans.BeanProperty
 
 
 @Entity
+@Table(name = "WORK_PERIOD")
 case class WorkPeriod(@BeanProperty timeAmount: Long,
                       @BeanProperty description: String,
-                      @BeanProperty workPeriodsDaysAndTimesWorkSchedulesId: Long,
+                      @BeanProperty workPeriodsDaysAndTimesId: Long,
                       @BeanProperty categoriesId: Long) {
 
   def this() {
