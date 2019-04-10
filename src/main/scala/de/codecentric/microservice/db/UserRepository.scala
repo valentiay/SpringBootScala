@@ -11,10 +11,11 @@ case class User(@BeanProperty userName: String) {
 
   def this() {
     this("")
+    println("Test Constructor")
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @BeanProperty
   val id: Long = 0L
 }

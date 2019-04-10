@@ -9,8 +9,5 @@ import org.springframework.web.bind.annotation._
 class CategoryController(private val categoryRepository: CategoryRepository) {
 
   @GetMapping(produces = Array("application/json"))
-  def getAllCategory() = {
-    println("Test")
-    categoryRepository.findAll()
-  }
+  def getAllCategory() = categoryRepository.findAll()
 }
