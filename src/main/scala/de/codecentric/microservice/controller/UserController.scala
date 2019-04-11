@@ -11,9 +11,5 @@ class UserController(private val userRepository: UserRepository) {
   def getAllUser() = userRepository.findAll()
 
   @PostMapping(produces = Array("application/json"), consumes = Array("application/json"))
-  def addUser(@RequestBody user: User) = {
-    println("Test")
-    userRepository.save(user)
-  }
-
+  def addUser(@RequestBody user: User) = userRepository.save(user)
 }

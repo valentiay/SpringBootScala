@@ -1,26 +1,30 @@
 package de.codecentric.microservice.db
 
-import javax.persistence._
-import org.springframework.data.jpa.repository.JpaRepository
-
 import scala.beans.BeanProperty
+import javax.persistence._
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
+
+import scala.annotation.meta.field
+
 
 @Entity
 @Table(name = "USERS")
-case class User(@BeanProperty userName: String) {
+case class User(@(Id@field)
+                @(GeneratedValue@field)
+                @BeanProperty id: Long,
+
+                @BeanProperty userName: String
+               ) {
 
   def this() {
-    this("")
+    this(0, "")
     println("Test Constructor")
   }
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @BeanProperty
-  val id: Long = 0L
 }
 
-
-trait UserRepository extends JpaRepository[User, java.lang.Long] {
-  type Users = java.util.List[User]
+@Repository
+trait UserRepository extends CrudRepository[User, java.lang.Long] {
 }
+
+//@SequenceGenerator(name = "sUserId", sequenceName = "S_USER_ID", allocationSize = 1, initialValue = 2)

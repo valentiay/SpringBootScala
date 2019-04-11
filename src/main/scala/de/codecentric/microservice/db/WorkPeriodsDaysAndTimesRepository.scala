@@ -2,31 +2,32 @@ package de.codecentric.microservice.db
 
 import java.sql.Timestamp
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence._
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.CrudRepository
 
+import scala.annotation.meta.field
 import scala.beans.BeanProperty
 
 @Entity
 @Table(name = "WORK_PERIODS_DAYS_AND_TIMES")
-case class WorkPeriodsDaysAndTimes(@BeanProperty startDayTime: Timestamp,
+case class WorkPeriodsDaysAndTimes(@(Id@field)
+                                   @(GeneratedValue@field)
+                                   @BeanProperty id: Long,
+
+                                   @BeanProperty startDayTime: Timestamp,
+
                                    @BeanProperty endDayTime: Timestamp,
-                                   @BeanProperty periodMin: Long) {
+
+                                   @BeanProperty periodMin: Long,
+
+                                   @(ManyToOne@field)
+                                   @(JoinColumn@field)(name = "usersId", nullable = true)
+                                   @BeanProperty user: User
+                                  ) {
   def this() {
-    this(null, null, 0)
+    this(0, null, null, 0, null)
   }
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty
-  val id: Long = 0L
-
-  @ManyToOne
-  @JoinColumn(name = "usersId", nullable = true)
-  @BeanProperty
-  var user: User = _
 }
 
-trait WorkPeriodsDaysAndTimesRepository extends JpaRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {
-  type WorkPeriodsDaysAndTimesList = java.util.List[WorkPeriodsDaysAndTimes]
-}
+trait WorkPeriodsDaysAndTimesRepository extends CrudRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {}
