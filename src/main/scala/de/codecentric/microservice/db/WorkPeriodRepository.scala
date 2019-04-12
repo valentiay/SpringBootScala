@@ -3,33 +3,34 @@ package de.codecentric.microservice.db
 import javax.persistence._
 import org.springframework.data.jpa.repository.JpaRepository
 
+import scala.annotation.meta.field
 import scala.beans.BeanProperty
 
 
 @Entity
 @Table(name = "WORK_PERIOD")
 case class WorkPeriod(@BeanProperty timeAmount: Long,
-                      @BeanProperty description: String) {
+
+                      @BeanProperty description: String,
+
+                      @(ManyToOne@field)
+                      @(JoinColumn@field)(name = "categoriesId", nullable = true)
+                      @BeanProperty category: Category,
+
+                      @(ManyToOne@field)
+                      @(JoinColumn@field)(name = "workPeriodsDaysAndTimesId", nullable = true)
+                      @BeanProperty
+                      var workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes
+                     ) {
 
   def this() {
-    this(0, "")
+    this(0, "", null, null)
   }
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty
   val id: Long = 0L
-
-  @ManyToOne
-  @JoinColumn(name = "categoriesId", nullable = true)
-  @BeanProperty
-  var category: Category = _
-
-  @ManyToOne
-  @JoinColumn(name = "workPeriodsDaysAndTimesId", nullable = true)
-  @BeanProperty
-  var workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes = _
-
 
 }
 

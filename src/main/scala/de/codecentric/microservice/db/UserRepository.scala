@@ -19,7 +19,6 @@ case class User(@(Id@field)
 
   def this() {
     this(0, "")
-    println("Test Constructor")
   }
 }
 
