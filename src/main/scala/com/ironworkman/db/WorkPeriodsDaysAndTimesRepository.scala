@@ -1,4 +1,4 @@
-package de.codecentric.microservice.db
+package com.ironworkman.db
 
 import java.sql.Timestamp
 

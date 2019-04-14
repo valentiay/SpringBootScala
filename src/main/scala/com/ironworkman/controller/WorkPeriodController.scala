@@ -1,6 +1,6 @@
-package de.codecentric.microservice.controller
+package com.ironworkman.controller
 
-import de.codecentric.microservice.db.{Category, WorkPeriod, WorkPeriodRepository, WorkPeriodsDaysAndTimes}
+import com.ironworkman.db.{Category, WorkPeriod, WorkPeriodRepository}
 import org.springframework.web.bind.annotation._
 
 @RestController

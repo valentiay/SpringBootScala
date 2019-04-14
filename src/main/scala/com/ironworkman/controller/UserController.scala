@@ -1,6 +1,6 @@
-package de.codecentric.microservice.controller
+package com.ironworkman.controller
 
-import de.codecentric.microservice.db.{User, UserRepository}
+import com.ironworkman.db.{User, UserRepository}
 import org.springframework.web.bind.annotation._
 
 @RestController

@@ -1,4 +1,4 @@
-package de.codecentric.microservice.db
+package com.ironworkman.db
 
 import javax.persistence._
 import org.springframework.data.jpa.repository.JpaRepository

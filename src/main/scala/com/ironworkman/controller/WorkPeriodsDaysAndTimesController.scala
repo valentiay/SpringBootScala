@@ -1,8 +1,8 @@
-package de.codecentric.microservice.controller
+package com.ironworkman.controller
 
 import java.sql.Timestamp
 
-import de.codecentric.microservice.db.{User, WorkPeriodsDaysAndTimes, WorkPeriodsDaysAndTimesRepository}
+import com.ironworkman.db.{User, WorkPeriodsDaysAndTimes, WorkPeriodsDaysAndTimesRepository}
 import org.springframework.web.bind.annotation._
 
 @RestController

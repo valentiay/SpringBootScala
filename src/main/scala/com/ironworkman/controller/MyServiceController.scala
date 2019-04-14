@@ -1,6 +1,6 @@
-package de.codecentric.microservice.controller
+package com.ironworkman.controller
 
-import de.codecentric.microservice.service.MyService
+import com.ironworkman.service.MyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
