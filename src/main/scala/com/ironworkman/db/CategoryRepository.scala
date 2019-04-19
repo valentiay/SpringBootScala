@@ -2,7 +2,7 @@ package com.ironworkman.db
 
 import javax.persistence._
 import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.{Controller, Repository, Service}
 
 import scala.beans.BeanProperty
 

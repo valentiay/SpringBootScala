@@ -39,9 +39,7 @@ object IronWorkManCore extends IOApp {
       _ <- printlnIO("Write pls interval duration")
       duration <- readLnIO
       _ <- (Timer[IO].sleep(1 millisecond) *>
-        elapsed(1, duration.toLong, amount.toLong)
-          .flatMap(x => printlnIO(x))
-        ).start
+        elapsed(1, duration.toLong, amount.toLong).flatMap(x => printlnIO(x))).start
       _ <- Timer[IO].sleep(duration.toLong * amount.toLong * 10 second)
     } yield ExitCode.Success
 }
