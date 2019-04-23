@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/period"))
-class WorkPeriodController(private val workPeriodRepository: WorkPeriodRepository) {
+class WorkPeriodController (private val workPeriodRepository: WorkPeriodRepository) {
 
   @GetMapping(produces = Array("application/json"))
   def getAllWorkIntervals() = workPeriodRepository.findAll()

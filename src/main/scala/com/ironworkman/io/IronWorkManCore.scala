@@ -1,5 +1,6 @@
 package com.ironworkman.io
 
+import cats.effect.concurrent.Ref
 import cats.effect.{ExitCode, IO, IOApp, Timer}
 
 import scala.concurrent.duration._
@@ -34,6 +35,10 @@ object IronWorkManCore extends IOApp {
 
   def run(args: List[String]): IO[ExitCode] =
     for {
+      tags <- AppTags(Nil)
+      _ <- tags.addTag((1L, 2L, 2L))
+      _ <- tags.addTag((1L, 2L, 3L))
+      _ <- tags.allTags.map(_.toString()).map(println(_))
       _ <- printlnIO("Hello write pls amount of intervals")
       amount <- readLnIO
       _ <- printlnIO("Write pls interval duration")
@@ -42,4 +47,14 @@ object IronWorkManCore extends IOApp {
         elapsed(1, duration.toLong, amount.toLong).flatMap(x => printlnIO(x))).start
       _ <- Timer[IO].sleep(duration.toLong * amount.toLong * 10 second)
     } yield ExitCode.Success
+}
+
+final class AppTags(ref: Ref[IO, List[(Long, Long, Long)]]) {
+  def allTags: IO[List[(Long, Long, Long)]]     = ref.get
+  def addTag(tag: (Long, Long, Long)): IO[Unit] = ref.update(tag :: _)
+}
+
+object AppTags {
+  def apply(initial: List[(Long, Long, Long)]): IO[AppTags] =
+    for (ref <- Ref[IO].of(initial)) yield new AppTags(ref)
 }

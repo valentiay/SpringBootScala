@@ -12,7 +12,7 @@ import scala.beans.BeanProperty
 @Entity
 @Table(name = "WORK_PERIODS_DAYS_AND_TIMES")
 case class WorkPeriodsDaysAndTimes(@(Id@field)
-                                   @(GeneratedValue@field)
+//                                   @(GeneratedValue@field)
                                    @BeanProperty id: Long,
 
                                    @BeanProperty startDayTime: Timestamp,

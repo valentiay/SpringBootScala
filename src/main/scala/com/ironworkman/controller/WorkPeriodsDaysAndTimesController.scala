@@ -26,16 +26,16 @@ class WorkPeriodsDaysAndTimesController(private val workPeriodsRepository: WorkP
     workPeriodsRepository.save(workPeriodsDaysAndTimes)
   }
 
-  @PostMapping(produces = Array("text/plain"), consumes = Array("text/plain"))
-  def addConfigureParam(@RequestBody inputString: String) = {
-    val timestamp: Timestamp = new Timestamp(System.currentTimeMillis())
-    val timestamp2: Timestamp = new Timestamp(System.currentTimeMillis() + 1000000000)
-
-    val workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes
-          = WorkPeriodsDaysAndTimes(0, timestamp, timestamp2, 60, User(1, "admin"))
-
-    workPeriodsRepository.save(workPeriodsDaysAndTimes)
-  }
+//  @PostMapping(produces = Array("text/plain"), consumes = Array("text/plain"))
+//  def addConfigureParam(@RequestBody inputString: String) = {
+//    val timestamp: Timestamp = new Timestamp(System.currentTimeMillis())
+//    val timestamp2: Timestamp = new Timestamp(System.currentTimeMillis() + 1000000000)
+//
+//    val workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes
+//          = WorkPeriodsDaysAndTimes(0, timestamp, timestamp2, 60, User(1, "admin"))
+//
+//    workPeriodsRepository.save(workPeriodsDaysAndTimes)
+//  }
 
   @GetMapping(value = Array("/{amount}/{duration}"), produces = Array("application/json"))
   def startApplication(@PathVariable("amount") amount: Long,

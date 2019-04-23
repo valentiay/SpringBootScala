@@ -11,7 +11,7 @@ import scala.annotation.meta.field
 @Entity
 @Table(name = "USERS")
 case class User(@(Id@field)
-                @(GeneratedValue@field)
+//                @(GeneratedValue@field)
                 @BeanProperty id: Long,
 
                 @BeanProperty userName: String
