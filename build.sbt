@@ -22,14 +22,16 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-data-jpa" % springBootVersion,
   "org.liquibase" % "liquibase-core" % liqibaseVersion,
   "org.postgresql" % "postgresql" % PgSQLVersion,
+//  "com.h2database" % "h2" % "1.0.60",
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion,
   "info.mukel" %% "telegrambot4s" % telegrammBotVersion,
   "org.typelevel" %% "cats-core" % catsVersion,
   "org.typelevel" %% "cats-effect" % catsEffectVersion
-    // https://mvnrepository.com/artifact/info.mukel/telegrambot4s
 )
 
 enablePlugins(JavaAppPackaging, AshScriptPlugin)
+
+//addSbtPlugin("com.github.sbtliquibase" % "sbt-liquibase" % "0.2.0")
 
 mainClass in Compile := Some("com.ironworkman.IronWorkManApplication")
 
