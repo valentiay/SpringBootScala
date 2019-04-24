@@ -11,23 +11,24 @@ import scala.beans.BeanProperty
 
 @Entity
 @Table(name = "WORK_PERIODS_DAYS_AND_TIMES")
-case class WorkPeriodsDaysAndTimes(@(Id@field)
+case class WorkPeriodsDaysAndTimes(
+    @(Id @field)
 //                                   @(GeneratedValue@field)
-                                   @BeanProperty id: Long,
+    @BeanProperty id: Long,
 
-                                   @BeanProperty startDayTime: Timestamp,
+    @BeanProperty startDayTime: Timestamp,
 
-                                   @BeanProperty endDayTime: Timestamp,
+    @BeanProperty endDayTime: Timestamp,
 
-                                   @BeanProperty periodMin: Long,
+    @BeanProperty periodMin: Long,
 
-                                   @(ManyToOne@field)
-                                   @(JoinColumn@field)(name = "usersId", nullable = true)
-                                   @BeanProperty user: User
-                                  ) {
+    @(ManyToOne @field)
+    @(JoinColumn @field)(name = "usersId", nullable = true)
+    @BeanProperty user: User) {
   def this() {
     this(0, null, null, 0, null)
   }
 }
 
-trait WorkPeriodsDaysAndTimesRepository extends CrudRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {}
+trait WorkPeriodsDaysAndTimesRepository
+    extends CrudRepository[WorkPeriodsDaysAndTimes, java.lang.Long] {}

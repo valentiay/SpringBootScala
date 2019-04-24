@@ -1,7 +1,7 @@
 package com.ironworkman
 
 import com.ironworkman.db.{UserRepository, WorkPeriodRepository, WorkPeriodsDaysAndTimesRepository}
-import com.ironworkman.telegramm.{HelloCount, IronWorkManBot}
+import com.ironworkman.telegramm.IronWorkManBot
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component

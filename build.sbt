@@ -13,7 +13,7 @@ val springBootVersion = "2.1.3.RELEASE"
 val lombokVersion = "1.16.20"
 val liqibaseVersion = "3.6.3"
 val PgSQLVersion = "42.2.1"
-val telegrammBotVersion = "2.9.3"
+val telegrammBotVersion = "3.0.9"
 
 libraryDependencies ++= Seq(
   "org.projectlombok" % "lombok" % lombokVersion,
@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
 
 enablePlugins(JavaAppPackaging, AshScriptPlugin)
 
-mainClass in Compile := Some("com.ironworkman.MyServiceApplication")
+mainClass in Compile := Some("com.ironworkman.IronWorkManApplication")
 
 dockerBaseImage := "openjdk:8-jre-alpine"
 

@@ -6,16 +6,12 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 import scala.annotation.meta.field
-
-
 @Entity
 @Table(name = "USERS")
-case class User(@(Id@field)
+case class User(@(Id @field)
 //                @(GeneratedValue@field)
                 @BeanProperty id: Long,
-
-                @BeanProperty userName: String
-               ) {
+                @BeanProperty userName: String) {
 
   def this() {
     this(0, "")
@@ -23,7 +19,6 @@ case class User(@(Id@field)
 }
 
 @Repository
-trait UserRepository extends CrudRepository[User, java.lang.Long] {
-}
+trait UserRepository extends CrudRepository[User, java.lang.Long] {}
 
 //@SequenceGenerator(name = "sUserId", sequenceName = "S_USER_ID", allocationSize = 1, initialValue = 2)

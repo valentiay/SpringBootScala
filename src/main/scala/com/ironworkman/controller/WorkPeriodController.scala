@@ -5,22 +5,23 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/period"))
-class WorkPeriodController (private val workPeriodRepository: WorkPeriodRepository) {
+class WorkPeriodController(
+    private val workPeriodRepository: WorkPeriodRepository) {
 
   @GetMapping(produces = Array("application/json"))
   def getAllWorkIntervals() = workPeriodRepository.findAll()
 
-  @PostMapping(produces = Array("application/json"), consumes = Array("application/json"))
+  @PostMapping(produces = Array("application/json"),
+               consumes = Array("application/json"))
   def addIntervals(@RequestBody workPeriod: WorkPeriod) =
     workPeriodRepository.save(workPeriod)
 
   @PostMapping(produces = Array("text/plain"), consumes = Array("text/plain"))
-  def addIntervalsFromString(@RequestBody inputString: String) ={
+  def addIntervalsFromString(@RequestBody inputString: String) = {
     val category: Category = Category("Test", "Test")
-
-//    val workPeriod: WorkPeriod = WorkPeriod()
-
-//    workPeriodRepository.save(workPeriod)
+    // TODO: scheduller
+    //    val workPeriod: WorkPeriod = WorkPeriod()
+    //    workPeriodRepository.save(workPeriod)
 
     println("Test Caontainer")
   }

@@ -1,4 +1,4 @@
-package com.ironworkman.io
+package com.ironworkman.console
 
 import cats.effect.concurrent.Ref
 import cats.effect.{ExitCode, IO, IOApp, Timer}
@@ -15,7 +15,9 @@ object IronWorkManCore extends IOApp {
 
   val readLnIO: IO[String] = IO(StdIn.readLine()) //TODO : make async !!!
 
-  def elapsed(number: Long = 0, duration: Long, amount: Long): IO[(Long, Long, Long)] =
+  def elapsed(number: Long = 0,
+              duration: Long,
+              amount: Long): IO[(Long, Long, Long)] =
     for {
       _ <- printlnIO(s"The $number interval started. Work!")
       _ <- Timer[IO].sleep(duration second)
@@ -23,14 +25,19 @@ object IronWorkManCore extends IOApp {
       _ <- printlnIO(s"Print minutes time for 1,2,3 categories separated by :")
       input <- readLnIO
       acc <- input match {
-        case "stop" => printlnIO("Go back and work, bitch!") *>
-          IO((0L, 0L, 0L))
-        case _ if number == amount => printlnIO("This is a statistic! ") *>
-          IO((0L, 0L, 0L))
+        case "stop" =>
+          printlnIO("Go back and work, bitch!") *>
+            IO((0L, 0L, 0L))
+        case _ if number == amount =>
+          printlnIO("This is a statistic! ") *>
+            IO((0L, 0L, 0L))
         case _ if number < amount => elapsed(number + 1, duration, amount)
       }
       inputs <- IO(input.split(";"))
-      acc <- IO((acc._1 + inputs(0).toLong, acc._2 + inputs(1).toLong, acc._3 + inputs(2).toLong))
+      acc <- IO(
+        (acc._1 + inputs(0).toLong,
+         acc._2 + inputs(1).toLong,
+         acc._3 + inputs(2).toLong))
     } yield acc
 
   def run(args: List[String]): IO[ExitCode] =
@@ -50,7 +57,7 @@ object IronWorkManCore extends IOApp {
 }
 
 final class AppTags(ref: Ref[IO, List[(Long, Long, Long)]]) {
-  def allTags: IO[List[(Long, Long, Long)]]     = ref.get
+  def allTags: IO[List[(Long, Long, Long)]] = ref.get
   def addTag(tag: (Long, Long, Long)): IO[Unit] = ref.update(tag :: _)
 }
 

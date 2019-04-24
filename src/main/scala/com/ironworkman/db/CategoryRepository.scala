@@ -22,5 +22,4 @@ case class Category(@BeanProperty name: String,
 }
 
 @Repository
-trait CategoryRepository extends CrudRepository[Category, java.lang.Long] {
-}
+trait CategoryRepository extends CrudRepository[Category, java.lang.Long] {}

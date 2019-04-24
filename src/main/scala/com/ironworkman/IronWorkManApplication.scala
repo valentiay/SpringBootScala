@@ -4,11 +4,11 @@ import com.ironworkman.telegramm.{IronWorkManBot, NewIronWorkManBot}
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
-object MyServiceApplication {
+object IronWorkManApplication {
   def main(args: Array[String]) : Unit = {
-    SpringApplication.run(classOf[MyServiceApplication], args :_ *)
+    SpringApplication.run(classOf[IronWorkManApplication], args :_ *)
   }
 }
 
 @SpringBootApplication
-class MyServiceApplication {}
+class IronWorkManApplication {}
