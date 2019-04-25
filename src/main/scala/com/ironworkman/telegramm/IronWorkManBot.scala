@@ -30,6 +30,7 @@ object IronWorkManBot extends TelegramBot with Polling with Commands {
             case 0 =>
               for {
                 _ <- sendMessageIO(chatId, s"Your work is finished after $count intervals")
+                // TODO: Reading from database statistics
               } yield ()
             case _ =>
               for {
