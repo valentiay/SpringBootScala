@@ -16,17 +16,15 @@ case class WorkPeriodsDaysAndTimes(
 //                                   @(GeneratedValue@field)
     @BeanProperty id: Long,
 
-    @BeanProperty startDayTime: Timestamp,
+    @BeanProperty intervalAmount: Long,
 
-    @BeanProperty endDayTime: Timestamp,
-
-    @BeanProperty periodMin: Long,
+    @BeanProperty intervalDuration: Long,
 
     @(ManyToOne @field)
     @(JoinColumn @field)(name = "usersId", nullable = true)
     @BeanProperty user: User) {
   def this() {
-    this(0, null, null, 0, null)
+    this(0, 0, 0, null)
   }
 }
 

@@ -43,13 +43,10 @@
             <column name="ID" type="INT">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="START_DAY_TIME" type="datetime(6)">
+            <column name="INTERVAL_AMOUNT" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="END_DAY_TIME" type="datetime(6)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PERIOD_MIN" type="INT">
+            <column name="INTERVAL_DURATION" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="USERS_ID" type="INT">
@@ -107,9 +104,8 @@
     <changeSet author="Opolskiy " id="1553504831976-17">
         <insert tableName="WORK_PERIODS_DAYS_AND_TIMES">
             <column name="ID" value='1'/>
-            <column name="START_DAY_TIME" value="2016-12-09 09:31:35.942243+00"/>
-            <column name="END_DAY_TIME" value="2016-12-09 16:31:35.942243+00"/>
-            <column name="PERIOD_MIN" value="30"/>
+            <column name="INTERVAL_AMOUNT" value="3"/>
+            <column name="INTERVAL_DURATION" value="30"/>
             <column name="USERS_ID" value="1"/>
         </insert>
     </changeSet>

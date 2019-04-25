@@ -23,12 +23,8 @@ class WorkPeriodsDaysAndTimesController(
 
   @PostMapping(produces = Array("text/plain"), consumes = Array("text/plain"))
   def addPeriodFromString(@RequestBody inputString: String) = {
-    val timestamp: Timestamp = new Timestamp(System.currentTimeMillis())
-    val timestamp2: Timestamp = new Timestamp(
-      System.currentTimeMillis() + 1000000000)
 
-    val workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes =
-      WorkPeriodsDaysAndTimes(0, timestamp, timestamp2, 60, User(1, "admin"))
+    val workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes = WorkPeriodsDaysAndTimes(0,  4, 30, User(1, "admin"))
 
     workPeriodsRepository.save(workPeriodsDaysAndTimes)
   }
