@@ -15,7 +15,7 @@ import scala.language.postfixOps
 
 object IronWorkManBot extends TelegramBot with Polling with Commands {
   implicit val timer = IO.timer(ExecutionContext.global)
-
+  // TODO: To properties
   def token = "767996938:AAF6talqUn--PI0z2vJeAxcOtvMRWrQkevw"
 
   def sendMessageIO(chatID: Long, msg: String): IO[Unit] = IO(request(SendMessage(chatID, msg)))
@@ -35,8 +35,9 @@ object IronWorkManBot extends TelegramBot with Polling with Commands {
               for {
                 _ <- sendMessageIO(chatId, s"The $count interval started, work!")
                 _ <- Timer[IO].sleep(duration second)
-                _ <- sendMessageIO(chatId, s"Write please whats done during the $count interval")
-                _ <- Timer[IO].sleep(5 second)
+                _ <- sendMessageIO(chatId, s"Write please time for 1,2,3 categories of $count interval")
+                _ <- sendMessageIO(chatId, s"Example: /time 15 10 5 programming drink tea mail")
+                _ <- Timer[IO].sleep(15 second)
                 _ <- scheduler(count + 1, amount, duration, chatId)
               } yield ()
           }
@@ -54,7 +55,7 @@ object IronWorkManBot extends TelegramBot with Polling with Commands {
         _ <- reply(s"Hello ${user.firstName} ${user.lastName}! I`m IronWorkMan bot")
         _ <- reply(s"Enter please /start with intervals amount and duration")
         _ <- reply(s"/start 5 30")
-        _ <- reply(s"This started sprint with 5 intervals of 30 minutes duration")
+        _ <- reply(s"This started sprint with 5 intervals 30 minutes even")
       } yield ExitCode.Success
     }
   }
@@ -66,31 +67,16 @@ object IronWorkManBot extends TelegramBot with Polling with Commands {
     }
   }
 
-  def elapsed(count: Long = 0,
-              intervalDuration: Long,
-              intervalAmount: Long,
-              chatId: Long,
-              input: String): IO[(Long, Long, Long)] =
-    for {
-      acc <- input match {
-              case _ if count == intervalAmount =>
-                sendMessageIO(chatId, "This is a statistic! ") *>
-                  IO(0L, 0L, 0L)
-              case _ if count < intervalAmount => elapsed(count + 1, intervalDuration, intervalAmount, chatId, input)
-            }
-      inputs <- IO(input.split(";"))
-      acc <- input.split(";") match {
-              case Array(_, _, _) =>
-                IO((acc._1 + cleanAndToLong(inputs(0)), acc._2 + cleanAndToLong(inputs(1)), acc._3 + cleanAndToLong(inputs(2))))
-              case _ =>
-                for {
-                  _ <- sendMessageIO(chatId, s"The $count interval started. Work!")
-                  _ <- Timer[IO].sleep(intervalDuration second)
-                  _ <- sendMessageIO(chatId, s"The $count interval finished. Whats done?")
-                  _ <- sendMessageIO(chatId, s"Print minutes time for 1,2,3 categories separated by ;")
-                } yield acc
-            }
-    } yield acc
+  onCommand("/time") { implicit msg =>
+    withArgs { args =>
+      for {
+        _ <- reply(s"You spend ${args.head.toLong} minutes in paid category")
+        _ <- reply(s"You spend ${args(1)} minutes in dont stop paid category")
+        _ <- reply(s"You spend ${args(2)} minutes in not pay category")
+      // TODO: saving to database
+      } yield ExitCode.Success
+    }
+  }
 
   def main(args: Array[String]): Unit = {
     IronWorkManBot.run()
