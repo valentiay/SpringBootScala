@@ -7,9 +7,7 @@ import cats.effect.{ExitCode, IO, Timer}
 
 import scala.language.postfixOps
 import cats.implicits._
-import com.ironworkman.console.ConsoleScheduller.scheduler
-import com.ironworkman.telegramm.IronWorkManBot.reply
-import info.mukel.telegrambot4s.api.declarative.{Action, Commands}
+import info.mukel.telegrambot4s.api.declarative.Commands
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -64,7 +62,7 @@ object IronWorkManBot extends TelegramBot with Polling with Commands {
   onCommand("/start") { implicit msg =>
     withArgs { args =>
       scheduler(0, args.head.toLong, args(1).toLong, msg.chat.id).unsafeRunAsyncAndForget()
-      // TODO: saving to database
+    // TODO: saving to database
     }
   }
 

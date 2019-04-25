@@ -3,13 +3,10 @@ package com.ironworkman.console
 import cats.effect.{ExitCode, IO, IOApp, Timer}
 
 import scala.language.postfixOps
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
 object ConsoleScheduller extends IOApp {
-//  implicit val timer = IO.timer(ExecutionContext.global)
-
   def printlnIO(str: String) = IO(println(str))
 
   def scheduler(count: Long, amount: Long, duration: Long, chatId: Long): IO[Unit] =

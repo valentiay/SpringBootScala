@@ -9,7 +9,6 @@ import scala.annotation.meta.field
 @Entity
 @Table(name = "USERS")
 case class User(@(Id @field)
-//                @(GeneratedValue@field)
                 @BeanProperty id: Long,
                 @BeanProperty userName: String) {
 
@@ -20,5 +19,3 @@ case class User(@(Id @field)
 
 @Repository
 trait UserRepository extends CrudRepository[User, java.lang.Long] {}
-
-//@SequenceGenerator(name = "sUserId", sequenceName = "S_USER_ID", allocationSize = 1, initialValue = 2)

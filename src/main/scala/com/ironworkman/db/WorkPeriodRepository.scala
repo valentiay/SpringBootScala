@@ -7,19 +7,15 @@ import scala.annotation.meta.field
 import scala.beans.BeanProperty
 @Entity
 @Table(name = "WORK_PERIOD")
-case class WorkPeriod(
-    @BeanProperty timeAmount: Long,
-
-    @BeanProperty description: String,
-
-    @(ManyToOne @field)
-    @(JoinColumn @field)(name = "categoriesId", nullable = true)
-    @BeanProperty category: Category,
-
-    @(ManyToOne @field)
-    @(JoinColumn @field)(name = "workPeriodsDaysAndTimesId", nullable = true)
-    @BeanProperty
-    var workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes) {
+case class WorkPeriod(@BeanProperty timeAmount: Long,
+                      @BeanProperty description: String,
+                      @(ManyToOne @field)
+                      @(JoinColumn @field)(name = "categoriesId", nullable = true)
+                      @BeanProperty category: Category,
+                      @(ManyToOne @field)
+                      @(JoinColumn @field)(name = "workPeriodsDaysAndTimesId", nullable = true)
+                      @BeanProperty
+                      var workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes) {
 
   def this() {
     this(0, "", null, null)

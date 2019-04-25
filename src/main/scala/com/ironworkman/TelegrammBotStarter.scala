@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class TelegrammBotStarter @Autowired()(private val userRepository: UserRepository,
                                        private val workPeriodRepository: WorkPeriodRepository,
                                        private val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository)
-  extends CommandLineRunner {
+    extends CommandLineRunner {
   override def run(args: String*): Unit = {
 //    val bot = new IronWorkManBot(userRepository,
 //                                 workPeriodRepository,

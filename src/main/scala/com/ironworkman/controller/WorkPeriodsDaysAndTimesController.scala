@@ -21,19 +21,13 @@ class WorkPeriodsDaysAndTimesController(private val workPeriodsRepository: WorkP
 
   @PostMapping(produces = Array("text/plain"), consumes = Array("text/plain"))
   def addConfigureParam(@RequestBody inputString: String) = {
-
-//    workPeriodsRepository.save(WorkPeriodsDaysAndTimes(2, 3, 60, User(1, "admin")))
-
+    // TODO: Make parse and save to db
     ConsoleScheduller().scheduler(0, 5, 3, 234234).unsafeRunAsyncAndForget()
   }
 
-  @GetMapping(value = Array("/{amount}/{duration}"),
-              produces = Array("application/json"))
-  def startApplication(@PathVariable("amount") amount: Long,
-                       @PathVariable("duration") duration: Long) = {
-
-    // TODO: with IO
-
+  @GetMapping(value = Array("/{amount}/{duration}"), produces = Array("application/json"))
+  def startApplication(@PathVariable("amount") amount: Long, @PathVariable("duration") duration: Long) = {
+    // TODO: scheduller and save to db
   }
 }
 
