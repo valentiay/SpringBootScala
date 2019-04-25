@@ -13,7 +13,7 @@ val springBootVersion   = "2.1.3.RELEASE"
 val lombokVersion       = "1.16.20"
 val liqibaseVersion     = "3.6.3"
 val PgSQLVersion        = "42.2.1"
-val telegrammBotVersion = "3.0.9"
+val telegrammBotVersion = "2.9.3"
 
 libraryDependencies ++= Seq(
   "org.projectlombok"        % "lombok"                       % lombokVersion,
