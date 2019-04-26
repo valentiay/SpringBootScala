@@ -74,7 +74,7 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       paid                    <- IO(categoryRepository.findById(1L))
       _ <- IO(
             workPeriodRepository
-              .save(WorkPeriod(null, paidTime, description, null, null)))
+              .save(WorkPeriod(null, paidTime, description, paid.get, workPeriodsDaysAndTimes.get)))
       _              <- respond(s"A time is recorded", chatId)
       dontStopPaying <- IO(categoryRepository.findById(2L))
       _ <- IO(
