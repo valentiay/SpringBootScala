@@ -8,7 +8,8 @@ import scala.beans.BeanProperty
 
 @Entity
 @Table(name = "CATEGORIES")
-case class Category(@BeanProperty name: String, @BeanProperty description: String) {
+case class Category(@BeanProperty name: String,
+                    @BeanProperty description: String) {
 
   def this() {
     this("", "")

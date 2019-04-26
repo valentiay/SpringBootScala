@@ -31,10 +31,10 @@
             </column>
             <column name="DESCRIPTION" type="VARCHAR(256)"/>
             <column name="WORK_PERIODS_DAYS_AND_TIMES_ID" type="INT">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="CATEGORIES_ID" type="INT">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
