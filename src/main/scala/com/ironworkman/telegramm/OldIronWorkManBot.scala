@@ -74,16 +74,17 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       paid                    <- IO(categoryRepository.findById(1L))
       _ <- IO(
             workPeriodRepository
-              .save(WorkPeriod(paidTime, description, paid.get, null)))
+              .save(WorkPeriod(null, paidTime, description, null, null)))
       _              <- respond(s"A time is recorded", chatId)
       dontStopPaying <- IO(categoryRepository.findById(2L))
       _ <- IO(
             workPeriodRepository
-              .save(WorkPeriod(dontStopPayingTime, description, dontStopPaying.get, workPeriodsDaysAndTimes.get)))
+              .save(WorkPeriod(null, dontStopPayingTime, description, dontStopPaying.get, workPeriodsDaysAndTimes.get)))
+      _              <- respond(s"A time is recorded", chatId)
       notPaying <- IO(categoryRepository.findById(3L))
       _ <- IO(
             workPeriodRepository
-              .save(WorkPeriod(notPayingTime, description, notPaying.get, workPeriodsDaysAndTimes.get)))
+              .save(WorkPeriod(null, notPayingTime, description, notPaying.get, workPeriodsDaysAndTimes.get)))
       _ <- respond(s"A time is recorded", chatId)
     } yield ()
 
