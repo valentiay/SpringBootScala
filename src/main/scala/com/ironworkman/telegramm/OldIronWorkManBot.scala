@@ -18,8 +18,8 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 case class OldIronWorkManBot(val userRepository: UserRepository,
-                        val workPeriodRepository: WorkPeriodRepository,
-                        val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository,
+                             val workPeriodRepository: WorkPeriodRepository,
+                             val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository,
                              val categoryRepository: CategoryRepository)
     extends TelegramBot with Polling with Commands {
 
@@ -51,21 +51,21 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
   def scheduler(count: Long, amount: Long, duration: Long, chatId: Long): IO[Unit] =
     for {
       _ <- amount - count match {
-        case 0 =>
-          for {
-            _ <- respond(s"Your work is finished after $count intervals", chatId)
-            // TODO: Reading from database statistics
-          } yield ()
-        case _ =>
-          for {
-            _ <- respond(s"The $count interval started, work!", chatId)
-            _ <- Timer[IO].sleep(duration second)
-            _ <- respond(s"Write please time for 1,2,3 categories of $count interval", chatId)
-            _ <- respond(s"Example: /time 15 10 5 programming drink tea mail", chatId)
-            _ <- Timer[IO].sleep(20 second)
-            _ <- scheduler(count + 1, amount, duration, chatId)
-          } yield ()
-      }
+            case 0 =>
+              for {
+                _ <- respond(s"Your work is finished after $count intervals", chatId)
+                // TODO: Reading from database statistics
+              } yield ()
+            case _ =>
+              for {
+                _ <- respond(s"The $count interval started, work!", chatId)
+                _ <- Timer[IO].sleep(duration second)
+                _ <- respond(s"Write please time for 1,2,3 categories of $count interval", chatId)
+                _ <- respond(s"Example: /time 15 10 5 programming drink tea mail", chatId)
+                _ <- Timer[IO].sleep(20 second)
+                _ <- scheduler(count + 1, amount, duration, chatId)
+              } yield ()
+          }
     } yield ()
 
   def recordTime(chatId: Long, paidTime: Long, dontStopPayingTime: Long, notPayingTime: Long, description: String): IO[Unit] =
@@ -80,7 +80,7 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       _ <- IO(
             workPeriodRepository
               .save(WorkPeriod(null, dontStopPayingTime, description, dontStopPaying.get, workPeriodsDaysAndTimes.get)))
-      _              <- respond(s"A time is recorded", chatId)
+      _         <- respond(s"A time is recorded", chatId)
       notPaying <- IO(categoryRepository.findById(3L))
       _ <- IO(
             workPeriodRepository
@@ -94,20 +94,22 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
         case Array(_, amount, duration) =>
           startSprint(message.chat.id, message.from.get.id, message.from.get.username.get, amount.toLong, duration.toLong)
             .unsafeRunAsyncAndForget()
-        case _ => respond("Enter command /start and two parameters, please", message.chat.id)
-          .unsafeRunAsyncAndForget()
+        case _ =>
+          respond("Enter command /start and two parameters, please", message.chat.id)
+            .unsafeRunAsyncAndForget()
       }
     case Some(text) if text.contains("time") =>
       text.split(" ") match {
         case Array(_, paidTime, dontStopPayingTime, notPayingTime, description) =>
-          recordTime(message.chat.id, paidTime.toLong, dontStopPayingTime.toLong,
-                                      notPayingTime.toLong, description)
+          recordTime(message.chat.id, paidTime.toLong, dontStopPayingTime.toLong, notPayingTime.toLong, description)
             .unsafeRunAsyncAndForget()
-        case _ => respond("Enter command /time and four parameters, please", message.chat.id)
-          .unsafeRunAsyncAndForget()
+        case _ =>
+          respond("Enter command /time and four parameters, please", message.chat.id)
+            .unsafeRunAsyncAndForget()
       }
-    case Some(text) => greeting(message.chat.id, message.from.get.id, message.from.get.username.get)
-      .unsafeRunAsyncAndForget()
+    case Some(text) =>
+      greeting(message.chat.id, message.from.get.id, message.from.get.username.get)
+        .unsafeRunAsyncAndForget()
   }
 
   def respond(msg: String, chatID: Long): IO[Unit] =
