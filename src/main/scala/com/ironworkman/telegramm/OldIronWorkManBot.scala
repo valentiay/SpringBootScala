@@ -53,10 +53,13 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       _ <- amount - count match {
             case 0 =>
               for {
-                _       <- respond(s"Your work is finished after $count intervals", chatId)
-                periods <- IO(workPeriodRepository.findByCategory_Id(1))
-                _       <- respond(s"Your work is finished after $count intervals", chatId)
-                // TODO: Reading from database statistics
+                _ <- respond(s"Your sprint is finished after $count intervals", chatId)
+                _ <- IO(workPeriodRepository.findSumByCategoryIdAndUser2(1))
+                      .flatMap(paid => respond(s"You were paid for $paid minutes", chatId))
+                _ <- IO(workPeriodRepository.findSumByCategoryIdAndUser2(2))
+                      .flatMap(dontStopPaying => respond(s"You did not stop paying for $dontStopPaying minutes", chatId))
+                _ <- IO(workPeriodRepository.findSumByCategoryIdAndUser2(3))
+                      .flatMap(dontPay => respond(s"You were not paid for $dontPay minutes", chatId))
               } yield ()
             case _ =>
               for {
