@@ -1,18 +1,20 @@
 package com.ironworkman
 
-import com.ironworkman.db.{UserRepository, WorkPeriodRepository, WorkPeriodsDaysAndTimesRepository}
-import com.ironworkman.telegramm.{OldIronWorkManBot, UpdatedIronWorkManBot}
+import com.ironworkman.db.{CategoryRepository, UserRepository, WorkPeriodRepository, WorkPeriodsDaysAndTimesRepository}
+import com.ironworkman.telegramm.OldIronWorkManBot
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
-class TelegrammBotStarter @Autowired()(private val userRepository: UserRepository,
-                                       private val workPeriodRepository: WorkPeriodRepository,
-                                       private val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository)
-    extends CommandLineRunner {
-  override def run(args: String*): Unit = {
-    val bot = new OldIronWorkManBot(userRepository, workPeriodRepository, workPeriodsDaysAndTimesRepository)
-    bot.run()
-  }
+@Service
+case class TelegrammBotStarter @Autowired()(private val userRepository: UserRepository,
+                                            private val workPeriodRepository: WorkPeriodRepository,
+                                            private val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository,
+                                            private val categoryRepository: CategoryRepository)
+  extends CommandLineRunner {
+
+  override def run(args: String*): Unit = OldIronWorkManBot(userRepository,
+                                                            workPeriodRepository,
+                                                            workPeriodsDaysAndTimesRepository,
+                                                            categoryRepository).run()
 }

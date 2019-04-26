@@ -10,4 +10,4 @@ object IronWorkManApplication {
 }
 
 @SpringBootApplication
-class IronWorkManApplication {}
+trait IronWorkManApplication

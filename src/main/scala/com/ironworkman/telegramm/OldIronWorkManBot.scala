@@ -17,40 +17,16 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class OldIronWorkManBot(val userRepository: UserRepository,
+case class OldIronWorkManBot(val userRepository: UserRepository,
                         val workPeriodRepository: WorkPeriodRepository,
-                        val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository)
+                        val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository,
+                             val categoryRepository: CategoryRepository)
     extends TelegramBot with Polling with Commands {
 
   implicit val timer                                     = IO.timer(ExecutionContext.global)
   def token                                              = "767996938:AAF6talqUn--PI0z2vJeAxcOtvMRWrQkevw"
   def sendMessageIO(chatID: Long, msg: String): IO[Unit] = IO(request(SendMessage(chatID, msg)))
   def cleanAndToLong(input: String): Long                = input.replace(" ", "").toLong
-
-  def scheduler(count: Long, amount: Long, duration: Long, chatId: Long): IO[Unit] =
-    for {
-      _ <- amount - count match {
-            case 0 =>
-              for {
-                _ <- respond(s"Your work is finished after $count intervals", chatId)
-                // TODO: Reading from database statistics
-              } yield ()
-            case _ =>
-              for {
-                _ <- respond(s"The $count interval started, work!", chatId)
-                _ <- Timer[IO].sleep(duration second)
-                _ <- respond(s"Write please time for 1,2,3 categories of $count interval", chatId)
-                _ <- respond(s"Example: /time 15 10 5 programming drink tea mail", chatId)
-                _ <- Timer[IO].sleep(15 second)
-                _ <- scheduler(count + 1, amount, duration, chatId)
-              } yield ()
-          }
-    } yield ()
-
-  def respond(msg: String, chatID: Long): IO[Unit] =
-    for {
-      _ <- sendMessageIO(chatID, msg)
-    } yield ()
 
   def greeting(chatId: Long, userId: Long, userName: String): IO[Unit] =
     for {
@@ -72,14 +48,70 @@ class OldIronWorkManBot(val userRepository: UserRepository,
       _ <- scheduler(0, amount.toLong, duration.toLong, chatId)
     } yield ()
 
+  def scheduler(count: Long, amount: Long, duration: Long, chatId: Long): IO[Unit] =
+    for {
+      _ <- amount - count match {
+        case 0 =>
+          for {
+            _ <- respond(s"Your work is finished after $count intervals", chatId)
+            // TODO: Reading from database statistics
+          } yield ()
+        case _ =>
+          for {
+            _ <- respond(s"The $count interval started, work!", chatId)
+            _ <- Timer[IO].sleep(duration second)
+            _ <- respond(s"Write please time for 1,2,3 categories of $count interval", chatId)
+            _ <- respond(s"Example: /time 15 10 5 programming drink tea mail", chatId)
+            _ <- Timer[IO].sleep(20 second)
+            _ <- scheduler(count + 1, amount, duration, chatId)
+          } yield ()
+      }
+    } yield ()
+
+  def recordTime(chatId: Long, paidTime: Long, dontStopPayingTime: Long, notPayingTime: Long, description: String): IO[Unit] =
+    for {
+      workPeriodsDaysAndTimes <- IO(workPeriodsDaysAndTimesRepository.findById(chatId))
+      paid                    <- IO(categoryRepository.findById(1L))
+      _ <- IO(
+            workPeriodRepository
+              .save(WorkPeriod(paidTime, description, paid.get, null)))
+      _              <- respond(s"A time is recorded", chatId)
+      dontStopPaying <- IO(categoryRepository.findById(2L))
+      _ <- IO(
+            workPeriodRepository
+              .save(WorkPeriod(dontStopPayingTime, description, dontStopPaying.get, workPeriodsDaysAndTimes.get)))
+      notPaying <- IO(categoryRepository.findById(3L))
+      _ <- IO(
+            workPeriodRepository
+              .save(WorkPeriod(notPayingTime, description, notPaying.get, workPeriodsDaysAndTimes.get)))
+      _ <- respond(s"A time is recorded", chatId)
+    } yield ()
+
   override def onMessage(message: Message) = message.text match {
     case Some(text) if text.contains("start") =>
       text.split(" ") match {
         case Array(_, amount, duration) =>
           startSprint(message.chat.id, message.from.get.id, message.from.get.username.get, amount.toLong, duration.toLong)
             .unsafeRunAsyncAndForget()
-        case _ => respond("Enter command and two parameters, please", message.chat.id)
+        case _ => respond("Enter command /start and two parameters, please", message.chat.id)
+          .unsafeRunAsyncAndForget()
       }
-    case Some(text) => greeting(message.chat.id, message.from.get.id, message.from.get.username.get).unsafeRunAsyncAndForget()
+    case Some(text) if text.contains("time") =>
+      text.split(" ") match {
+        case Array(_, paidTime, dontStopPayingTime, notPayingTime, description) =>
+          recordTime(message.chat.id, paidTime.toLong, dontStopPayingTime.toLong,
+                                      notPayingTime.toLong, description)
+            .unsafeRunAsyncAndForget()
+        case _ => respond("Enter command /time and four parameters, please", message.chat.id)
+          .unsafeRunAsyncAndForget()
+      }
+    case Some(text) => greeting(message.chat.id, message.from.get.id, message.from.get.username.get)
+      .unsafeRunAsyncAndForget()
   }
+
+  def respond(msg: String, chatID: Long): IO[Unit] =
+    for {
+      _ <- sendMessageIO(chatID, msg)
+    } yield ()
+
 }

@@ -120,5 +120,6 @@
     </changeSet>
     <changeSet author="Opolskiy " id="1553504831976-19">
         <createSequence sequenceName="S_USER_ID"/>
+        <createSequence sequenceName="hibernate_sequence"/>
     </changeSet>
 </databaseChangeLog>

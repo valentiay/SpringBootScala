@@ -13,8 +13,11 @@ import scala.beans.BeanProperty
 @Table(name = "WORK_PERIODS_DAYS_AND_TIMES")
 case class WorkPeriodsDaysAndTimes(@(Id @field)
                                    @BeanProperty id: Long,
+
                                    @BeanProperty intervalAmount: Long,
+
                                    @BeanProperty intervalDuration: Long,
+
                                    @(ManyToOne @field)
                                    @(JoinColumn @field)(name = "usersId", nullable = true)
                                    @BeanProperty user: User) {
