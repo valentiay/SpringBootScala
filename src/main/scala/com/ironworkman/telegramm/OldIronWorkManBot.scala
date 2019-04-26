@@ -53,7 +53,9 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       _ <- amount - count match {
             case 0 =>
               for {
-                _ <- respond(s"Your work is finished after $count intervals", chatId)
+                _       <- respond(s"Your work is finished after $count intervals", chatId)
+                periods <- IO(workPeriodRepository.findByCategory_Id(1))
+                _       <- respond(s"Your work is finished after $count intervals", chatId)
                 // TODO: Reading from database statistics
               } yield ()
             case _ =>
