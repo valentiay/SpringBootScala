@@ -136,6 +136,10 @@ class UpdatedIronWorkManBot(
 ////    for {
 ////      _ <- IO.fromFuture(IO.pure(reply(s"Hello ${msg.from.get.firstName}")))
 ////      urIO <- IO(userRepository)
+////        /* Лучше не делать вызовы unsafeRunAsyncAndForget внутри flatMap-ов (== for-comprehension).
+////           Нужно строить архитектуру так, чтобы unsafeRunAsyncAndForget вызывался один раз в самом конце
+////           цепочки flatMap-ов
+////        */
 ////      _ <- IO(IO(urIO.save(User(msg.from.get.id, msg.from.get.username.get))).unsafeRunAsyncAndForget())
 ////    } yield ()
 ////  }

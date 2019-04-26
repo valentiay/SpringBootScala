@@ -24,6 +24,11 @@ case class WorkPeriod(@(Id @field)
                       @(JoinColumn @field)(name = "workPeriodsDaysAndTimesId", nullable = true)
                       @BeanProperty workPeriodsDaysAndTimes: WorkPeriodsDaysAndTimes) {
 
+  /*
+    Обычно в скале не делают несколько конструкторов. Стараются сделать один конструктор и в объекте-компаньоне
+    добавить методов, которые делают инстанс из разных комбинаций параметров. Хотя тут это может быть необходимо для
+    интеграции с джавой
+   */
   def this() {
     this(null, 0, "", null, null)
   }

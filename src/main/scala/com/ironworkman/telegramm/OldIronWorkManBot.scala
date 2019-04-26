@@ -17,12 +17,43 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
+/*
+   В данном случае лучше сделать обычный класс, а не case-класс, т.к.
+    1) используется наследование, а для кейс-классов наследование - это плохая идея из-за автоматически заданных операторов
+       equals и hashCode (https://stackoverflow.com/questions/11158929/what-is-so-wrong-with-case-class-inheritance).
+       Здесь проблем может не быть, но все равно лучше так не делат.
+    2) case-классы обычно используется для представления каких-то моделей данных. В этом случае как раз полезны equals и
+       hashCode, но классы, которые используются для обработки данных, в этих операторах не нуждаются. К тому же, так
+       легче отличать обработчики от данных.
+
+   Кроме того, параметры у case-классов по-умолчанию val, поэтому здесь val перед каждой
+   переменной в конструкторе не нужен.
+ */
 case class OldIronWorkManBot(val userRepository: UserRepository,
                              val workPeriodRepository: WorkPeriodRepository,
                              val workPeriodsDaysAndTimesRepository: WorkPeriodsDaysAndTimesRepository,
                              val categoryRepository: CategoryRepository)
     extends TelegramBot with Polling with Commands {
 
+  /*
+    Здесь, наверное, самый важный момент: использовать ExecutionContext.global опасно, потому что в нем явно не
+    указывается число потоков в thread-пуле. Из-за этого сложно предсказать производительность.
+    Особенно внимательно стоит относиться к блокирующим вызовам: каждый блокирующий вызов занимает один поток. Если
+    будут заняты все потоки в пуле, новые вызовы будет невозможно начать, пока старые не закончатся.
+    Сторонние библиотеки (обычно, не очень хорошего качества) тоже могут использовать ExecutionContext.global, что
+    только усугубляет ситуацию.
+
+    Более "красиво" это написано здесь:
+    https://typelevel.org/cats-effect/concurrency/basics.html#blocking-threads
+    https://monix.io/docs/2x/best-practices/blocking.html#if-blocking-use-scalas-blockcontext
+
+    Про создание кастомных ExecutionContext лучше погуглить, это довольно широкая тема.
+
+    Уделяю это такое внимание, потому что некоторые вызовы в коде, например
+      IO(userRepository.save(User(userId, userName)))
+    , выглядят блокирующими (Я могу в этом ошибаться). Лучше их избегать и использовать асинхронные драйверы к базам
+    данных, но если таких нет, то нужно внимательно следить за ExecutionContext-ами.
+   */
   implicit val timer                                     = IO.timer(ExecutionContext.global)
   def token                                              = "767996938:AAF6talqUn--PI0z2vJeAxcOtvMRWrQkevw"
   def sendMessageIO(chatID: Long, msg: String): IO[Unit] = IO(request(SendMessage(chatID, msg)))
@@ -78,7 +109,7 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
       workPeriodsDaysAndTimes <- IO(workPeriodsDaysAndTimesRepository.findById(chatId))
       paid                    <- IO(categoryRepository.findById(1L))
       _ <- IO(
-            workPeriodRepository
+            workPeriodRepository// См коммент в WorkPeriodRepository.scala
               .save(WorkPeriod(null, paidTime, description, paid.get, workPeriodsDaysAndTimes.get)))
       _              <- respond(s"A time is recorded", chatId)
       dontStopPaying <- IO(categoryRepository.findById(2L))
@@ -118,6 +149,8 @@ case class OldIronWorkManBot(val userRepository: UserRepository,
   }
 
   def respond(msg: String, chatID: Long): IO[Unit] =
+    // Это выражение аналогично простому sendMessageIO(chatID, msg)
+    // (Возможно заделка на будущее, в новой версии выглядит по-другому)
     for {
       _ <- sendMessageIO(chatID, msg)
     } yield ()
